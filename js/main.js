@@ -31,9 +31,16 @@
     revealEls.forEach((el) => el.classList.add("in"));
   }
 
-  /* ---------- Meta bar ---------- */
+  /* ---------- Meta bar + reading progress ---------- */
   const meta = document.getElementById("meta");
-  const onScroll = () => meta.classList.toggle("scrolled", window.scrollY > 24);
+  const progress = document.querySelector("[data-progress]");
+  const onScroll = () => {
+    meta.classList.toggle("scrolled", window.scrollY > 24);
+    if (progress) {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+    }
+  };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 

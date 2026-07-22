@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Routine — AI-агенты клиентской поддержки</title>
   <meta name="description" content="Внедряем AI-агентов клиентской поддержки. За 3 недели, с вашим тоном голоса и интеграциями в Bitrix24, amoCRM и Telegram." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Routine — AI-агенты клиентской поддержки" />
+  <meta property="og:description" content="За 3 недели · Bitrix24 / amoCRM / Telegram · 78% обращений без оператора." />
+  <meta property="og:image" content="https://alinavenera.github.io/figma_test/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alinavenera.github.io/figma_test/assets/og.png" />
   <link rel="icon" type="image/svg+xml" href="assets/mark.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,6 +21,7 @@
 </head>
 <body>
   <div class="cursor" data-cursor aria-hidden="true"></div>
+  <div class="progress" data-progress aria-hidden="true"></div>
 
   <!-- Meta bar -->
   <header class="meta" id="meta">
@@ -76,11 +85,11 @@
 
       <div class="hero__proof">
         <div class="proof">
-          <span class="proof__k">78<i class="accent">%</i></span>
+          <span class="proof__k"><span data-count="78">0</span><i class="accent">%</i></span>
           <span class="proof__v">закрытых обращений без оператора на первой линии</span>
         </div>
         <div class="proof">
-          <span class="proof__k">95<i class="accent">%</i></span>
+          <span class="proof__k"><span data-count="95">0</span><i class="accent">%</i></span>
           <span class="proof__v">совпадение с ожидаемым ответом в eval</span>
         </div>
         <div class="proof">

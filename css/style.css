@@ -145,6 +145,16 @@ a:focus-visible, button:focus-visible {
 }
 body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
 
+/* Reading progress — hairline accent at the very top */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
 /* ============================================================
    Meta bar
    ============================================================ */
