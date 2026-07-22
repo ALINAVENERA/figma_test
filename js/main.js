@@ -1,5 +1,6 @@
 /* ============================================================
-   STUDIO NOX — interactions
+   ROUTINE — interactions
+   Motion doctrine: informs, not delights. 200ms, ease-out.
    ============================================================ */
 (function () {
   "use strict";
@@ -11,7 +12,7 @@
   const hero = document.querySelector(".hero");
   requestAnimationFrame(() => hero && hero.classList.add("loaded"));
 
-  /* ---------- Reveal on scroll ---------- */
+  /* ---------- Reveal on scroll: 12px fade-up ---------- */
   const revealEls = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(
@@ -23,33 +24,75 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+      { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
     );
     revealEls.forEach((el) => io.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add("in"));
   }
 
-  /* ---------- Meta bar scrolled state ---------- */
+  /* ---------- Meta bar: rule appears on scroll ---------- */
   const meta = document.getElementById("meta");
-  const onScroll = () => meta.classList.toggle("scrolled", window.scrollY > 30);
+  const onScroll = () => meta.classList.toggle("scrolled", window.scrollY > 24);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* ---------- Live Berlin clock ---------- */
+  /* ---------- Theme toggle: light is default, persisted ---------- */
+  const root = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
+  const applyTheme = (theme) => {
+    if (theme === "dark") root.setAttribute("data-theme", "dark");
+    else root.removeAttribute("data-theme");
+    toggle.textContent = theme === "dark" ? "[ light ]" : "[ dark ]";
+  };
+  applyTheme(localStorage.getItem("rt-theme") || "light");
+  toggle.addEventListener("click", () => {
+    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next);
+    localStorage.setItem("rt-theme", next);
+  });
+
+  /* ---------- Stat counters ---------- */
+  const counters = document.querySelectorAll("[data-count]");
+  const countIO = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10) || 0;
+        if (reduceMotion) {
+          el.textContent = target;
+        } else {
+          const duration = 900;
+          const start = performance.now();
+          const tick = (now) => {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3); /* cubic ease-out */
+            el.textContent = Math.round(target * eased);
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+        countIO.unobserve(el);
+      });
+    },
+    { threshold: 0.6 }
+  );
+  counters.forEach((el) => countIO.observe(el));
+
+  /* ---------- Moscow clock ---------- */
   const clockEls = document.querySelectorAll("[data-clock]");
-  const fmt = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/Berlin",
+  const fmt = new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Europe/Moscow",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
   });
-  const tick = () => {
+  const tickClock = () => {
     const t = fmt.format(new Date());
     clockEls.forEach((el) => (el.textContent = t));
   };
-  tick();
-  setInterval(tick, 15000);
+  tickClock();
+  setInterval(tickClock, 15000);
 
   /* ---------- Back to top ---------- */
   const toTop = document.getElementById("toTop");
@@ -59,65 +102,30 @@
     );
   }
 
-  /* ---------- Custom cursor (fine pointer only) ---------- */
+  /* ---------- Custom cursor: ink square with slight lerp ---------- */
   if (finePointer && !reduceMotion) {
     const cursor = document.querySelector("[data-cursor]");
-    const label = document.querySelector("[data-cursor-label]");
     document.body.classList.add("has-cursor");
 
-    let mx = window.innerWidth / 2,
-      my = window.innerHeight / 2;
-    let cx = mx,
-      cy = my;
+    let mx = innerWidth / 2, my = innerHeight / 2;
+    let cx = mx, cy = my;
 
-    window.addEventListener(
-      "mousemove",
-      (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-      },
-      { passive: true }
-    );
+    addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
 
     const render = () => {
-      cx += (mx - cx) * 0.18;
-      cy += (my - cy) * 0.18;
+      cx += (mx - cx) * 0.3;
+      cy += (my - cy) * 0.3;
       cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
       requestAnimationFrame(render);
     };
     render();
 
-    // Hover growth + optional label
     document.querySelectorAll("[data-hover]").forEach((el) => {
-      el.addEventListener("mouseenter", () => {
-        cursor.classList.add("is-hover");
-        const text = el.getAttribute("data-cursor-text");
-        if (label) label.textContent = text || "";
-      });
-      el.addEventListener("mouseleave", () => {
-        cursor.classList.remove("is-hover");
-        if (label) label.textContent = "";
-      });
+      el.addEventListener("mouseenter", () => cursor.classList.add("is-hover"));
+      el.addEventListener("mouseleave", () => cursor.classList.remove("is-hover"));
     });
 
-    // Hide when leaving the window
     document.addEventListener("mouseleave", () => (cursor.style.opacity = "0"));
     document.addEventListener("mouseenter", () => (cursor.style.opacity = "1"));
-  }
-
-  /* ---------- Magnetic elements ---------- */
-  if (finePointer && !reduceMotion) {
-    document.querySelectorAll("[data-magnetic]").forEach((el) => {
-      const strength = 0.35;
-      el.addEventListener("mousemove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = e.clientX - (r.left + r.width / 2);
-        const y = e.clientY - (r.top + r.height / 2);
-        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-      });
-      el.addEventListener("mouseleave", () => {
-        el.style.transform = "";
-      });
-    });
   }
 })();
