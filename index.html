@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/fonts.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -41,6 +42,7 @@
   <main id="top">
     <!-- [00] Hero: заявление + живое демо -->
     <section class="hero">
+      <canvas class="field" id="field" aria-hidden="true"></canvas>
       <div class="hero__grid">
         <div class="hero__copy">
           <div class="hero__meta mono">
@@ -99,12 +101,12 @@
       </div>
     </section>
 
-    <!-- Ticker -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker__row mono">
+    <!-- Ticker: giant outline marquee -->
+    <div class="ticker ticker--big" aria-hidden="true">
+      <div class="ticker__row">
         <div class="ticker__track">
-          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; WhatsApp &#8594; HubSpot &#8594; SIP &#8594; Mango Office &#8594; RAG &#8594; Eval &#8594; Widget &#8594; email &#8594;&nbsp;</span>
-          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; WhatsApp &#8594; HubSpot &#8594; SIP &#8594; Mango Office &#8594; RAG &#8594; Eval &#8594; Widget &#8594; email &#8594;&nbsp;</span>
+          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; WhatsApp &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594; SIP &#8594;&nbsp;</span>
+          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; WhatsApp &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594; SIP &#8594;&nbsp;</span>
         </div>
       </div>
     </div>

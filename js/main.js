@@ -8,9 +8,88 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* ---------- Hero load reveal ---------- */
+  /* ---------- Kinetic type: split hero title into letters ---------- */
   const hero = document.querySelector(".hero");
+  if (!reduceMotion) {
+    let chIndex = 0;
+    document.querySelectorAll(".hero__title .line > span").forEach((lineSpan) => {
+      const nodes = Array.from(lineSpan.childNodes);
+      lineSpan.textContent = "";
+      for (const node of nodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          for (const char of node.textContent) {
+            if (char === " ") { lineSpan.appendChild(document.createTextNode(" ")); continue; }
+            const s = document.createElement("span");
+            s.className = "ch";
+            s.textContent = char;
+            s.style.transitionDelay = chIndex * 16 + "ms";
+            lineSpan.appendChild(s);
+            chIndex++;
+          }
+        } else {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.style.transitionDelay = chIndex * 16 + "ms";
+          s.appendChild(node);
+          lineSpan.appendChild(s);
+          chIndex++;
+        }
+      }
+    });
+  }
   requestAnimationFrame(() => hero && hero.classList.add("loaded"));
+
+  /* ---------- Kinetic type: section titles reveal per word ---------- */
+  const plainTitles = Array.from(document.querySelectorAll(".section__title"))
+    .filter((t) => t.children.length === 0);
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    plainTitles.forEach((t) => {
+      const words = t.textContent.split(" ");
+      t.textContent = "";
+      words.forEach((w, i) => {
+        const mask = document.createElement("span");
+        mask.className = "wmask";
+        const inner = document.createElement("span");
+        inner.textContent = w;
+        inner.style.transitionDelay = i * 70 + "ms";
+        mask.appendChild(inner);
+        t.appendChild(mask);
+        if (i < words.length - 1) t.appendChild(document.createTextNode(" "));
+      });
+    });
+    const wordsIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("words-in");
+          wordsIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    plainTitles.forEach((t) => wordsIO.observe(t));
+  }
+
+  /* ---------- Footer wordmark: letters react to hover ---------- */
+  const wordmark = document.querySelector(".footer__wordmark");
+  if (wordmark && finePointerEarly()) {
+    const nodes = Array.from(wordmark.childNodes);
+    wordmark.textContent = "";
+    for (const node of nodes) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        for (const char of node.textContent) {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = char;
+          wordmark.appendChild(s);
+        }
+      } else {
+        wordmark.appendChild(node);
+      }
+    }
+  }
+  function finePointerEarly() {
+    return window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+           !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   /* ---------- Reveal on scroll ---------- */
   const revealEls = document.querySelectorAll(".reveal");
@@ -98,6 +177,18 @@
       busy = true;
       scramble(el, 400);
       setTimeout(() => (busy = false), 450);
+    });
+  });
+  // card indexes decode on card hover
+  document.querySelectorAll(".card").forEach((card) => {
+    const idx = card.querySelector(".card__idx");
+    if (!idx) return;
+    let busy = false;
+    card.addEventListener("mouseenter", () => {
+      if (busy) return;
+      busy = true;
+      scramble(idx, 350);
+      setTimeout(() => (busy = false), 400);
     });
   });
 
@@ -251,5 +342,99 @@
       });
     }, { threshold: 0.3 });
     chatIO.observe(chatBody);
+  }
+
+  /* ============================================================
+     Hero dot field — square grid, ambient wave + cursor ripple
+     ============================================================ */
+  const field = document.getElementById("field");
+  if (field && !reduceMotion) {
+    const ctx = field.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const GAP = 30;          // grid spacing (css px)
+    const DOT = 2.4;         // base dot size
+    let W = 0, H = 0, cols = 0, rows = 0;
+    let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
+    let mx = -9999, my = -9999, active = false;
+    let running = true;
+    const R = 150;           // cursor influence radius
+
+    function readColors() {
+      const cs = getComputedStyle(document.documentElement);
+      colors.dot = cs.getPropertyValue("--fg-muted").trim() || "#5F5E5A";
+      colors.accent = cs.getPropertyValue("--accent").trim() || "#FF4A1C";
+    }
+    function resize() {
+      const r = field.getBoundingClientRect();
+      W = r.width; H = r.height;
+      field.width = W * dpr; field.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(W / GAP) + 1;
+      rows = Math.ceil(H / GAP) + 1;
+    }
+    readColors();
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    field.parentElement.addEventListener("mousemove", (e) => {
+      const r = field.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+      active = true;
+    });
+    field.parentElement.addEventListener("mouseleave", () => { active = false; mx = my = -9999; });
+
+    // theme toggle should refresh colors
+    const themeBtn = document.getElementById("themeToggle");
+    if (themeBtn) themeBtn.addEventListener("click", () => setTimeout(readColors, 10));
+
+    let t = 0;
+    function draw() {
+      if (!running) return;
+      t += 0.02;
+      ctx.clearRect(0, 0, W, H);
+      for (let gy = 0; gy < rows; gy++) {
+        for (let gx = 0; gx < cols; gx++) {
+          const x = gx * GAP;
+          const y = gy * GAP;
+          // ambient diagonal wave
+          const wave = Math.sin(x * 0.015 + y * 0.02 + t);
+          let size = DOT + wave * 0.9;
+          let alpha = 0.28 + wave * 0.12;
+          let accent = false;
+
+          if (active) {
+            const dx = x - mx, dy = y - my;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < R) {
+              const f = 1 - dist / R;
+              size += f * 5.5;
+              alpha += f * 0.6;
+              if (f > 0.55) accent = true;
+            }
+          }
+          // sparse static accent nodes
+          if (!accent && (gx * 31 + gy * 17) % 41 === 0) accent = true;
+
+          ctx.globalAlpha = Math.min(alpha, 0.95);
+          ctx.fillStyle = accent ? colors.accent : colors.dot;
+          const s = Math.max(size, 0.5);
+          ctx.fillRect(x - s / 2, y - s / 2, s, s);
+        }
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+
+    const heroEl = document.querySelector(".hero");
+    const fieldIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const was = running;
+        running = e.isIntersecting;
+        if (running && !was) requestAnimationFrame(draw);
+      });
+    }, { threshold: 0.02 });
+    fieldIO.observe(heroEl);
+    requestAnimationFrame(draw);
   }
 })();
