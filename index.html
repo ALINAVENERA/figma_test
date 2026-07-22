@@ -1,171 +1,187 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alina Venera — Product Designer</title>
-  <meta name="description" content="Портфолио продуктового дизайнера: проекты, подход, контакты." />
+  <title>Studio Nox — Independent design & technology studio</title>
+  <meta name="description" content="Independent studio for brands with something to prove. Strategy, identity, web and product design." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,900&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <!-- Navigation -->
-  <header class="nav" id="nav">
-    <a href="#top" class="nav__logo">AV<span>.</span></a>
-    <nav class="nav__links">
-      <a href="#work">Работы</a>
-      <a href="#about">Обо мне</a>
-      <a href="#contact">Контакты</a>
-    </nav>
-    <button class="theme-toggle" id="themeToggle" aria-label="Сменить тему">
-      <span class="theme-toggle__icon">☾</span>
-    </button>
-  </header>
-
-  <!-- Hero -->
-  <section class="hero" id="top">
-    <div class="hero__inner">
-      <p class="hero__eyebrow reveal">Product Designer · Санкт-Петербург</p>
-      <h1 class="hero__title">
-        <span class="reveal" style="--d:0">Придумываю</span>
-        <span class="reveal" style="--d:1">интерфейсы, которые</span>
-        <span class="reveal hero__accent" style="--d:2">приятно трогать.</span>
-      </h1>
-      <p class="hero__lead reveal" style="--d:3">
-        Проектирую продукты от идеи до пикселя — исследование, прототип,
-        интерфейс и та самая мелкая анимация, из-за которой хочется вернуться.
-      </p>
-      <div class="hero__cta reveal" style="--d:4">
-        <a href="#work" class="btn btn--primary">Смотреть работы</a>
-        <a href="#contact" class="btn btn--ghost">Написать мне</a>
-      </div>
-    </div>
-    <div class="hero__scroll reveal" style="--d:5">
-      <span>Листай вниз</span>
-      <div class="hero__scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- Marquee -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>UX/UI · Прототипы · Дизайн-системы · Моушн · Исследования · Веб · Мобайл ·&nbsp;</span>
-      <span>UX/UI · Прототипы · Дизайн-системы · Моушн · Исследования · Веб · Мобайл ·&nbsp;</span>
-    </div>
+  <!-- Custom cursor -->
+  <div class="cursor" data-cursor aria-hidden="true">
+    <span class="cursor__label" data-cursor-label></span>
   </div>
 
-  <!-- Work -->
-  <section class="work" id="work">
-    <div class="section-head">
-      <h2 class="section-title reveal">Избранные проекты</h2>
-      <p class="section-sub reveal" style="--d:1">2023 — 2026</p>
+  <!-- Meta bar -->
+  <header class="meta" id="meta">
+    <a href="#top" class="meta__brand">STUDIO NOX™</a>
+    <nav class="meta__nav">
+      <a href="#work" data-hover>Index</a>
+      <a href="#studio" data-hover>Studio</a>
+      <a href="#contact" data-hover>Contact</a>
+    </nav>
+    <div class="meta__status">
+      <span class="dot"></span>
+      <span>Available for work '26</span>
     </div>
+  </header>
 
-    <div class="work__grid">
-      <a class="card reveal" href="#" style="--d:0">
-        <div class="card__media card__media--1">
-          <span class="card__index">01</span>
-        </div>
-        <div class="card__body">
-          <h3>Nova Banking</h3>
-          <p>Редизайн мобильного банка. −38% времени на перевод.</p>
-          <div class="card__tags"><span>Mobile</span><span>Fintech</span></div>
-        </div>
-      </a>
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__eyebrow">
+        <span>(01) — Design &amp; technology studio</span>
+        <span>Est. 2019 / Berlin</span>
+      </div>
 
-      <a class="card reveal" href="#" style="--d:1">
-        <div class="card__media card__media--2">
-          <span class="card__index">02</span>
-        </div>
-        <div class="card__body">
-          <h3>Orbit CRM</h3>
-          <p>Дизайн-система для B2B-платформы. 120+ компонентов.</p>
-          <div class="card__tags"><span>Web</span><span>Design System</span></div>
-        </div>
-      </a>
+      <h1 class="hero__title">
+        <span class="line"><span>Independent studio</span></span>
+        <span class="line"><span>for brands with</span></span>
+        <span class="line"><span class="serif">something to <em>prove.</em></span></span>
+      </h1>
 
-      <a class="card reveal" href="#" style="--d:2">
-        <div class="card__media card__media--3">
-          <span class="card__index">03</span>
-        </div>
-        <div class="card__body">
-          <h3>Lumen Health</h3>
-          <p>Приложение для трекинга сна с мягкой моушн-подачей.</p>
-          <div class="card__tags"><span>Mobile</span><span>Health</span></div>
-        </div>
-      </a>
-
-      <a class="card reveal" href="#" style="--d:3">
-        <div class="card__media card__media--4">
-          <span class="card__index">04</span>
-        </div>
-        <div class="card__body">
-          <h3>Field Notes</h3>
-          <p>Лендинг для стартапа. Собрал 4к подписок за неделю.</p>
-          <div class="card__tags"><span>Web</span><span>Landing</span></div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section class="about" id="about">
-    <div class="about__grid">
-      <div class="about__text reveal">
-        <h2 class="section-title">Обо мне</h2>
-        <p>
-          Привет! Я Алина — продуктовый дизайнер с 6 годами практики.
-          Люблю задачи, где нужно распутать сложное и превратить его
-          в интерфейс, который понятен без инструкции.
+      <div class="hero__foot">
+        <p class="hero__lead">
+          We design and build websites, brands and products for founders who
+          would rather be remembered than liked. Small team, no filler.
         </p>
-        <p>
-          Работаю на стыке дизайна и кода: сама верстаю прототипы,
-          дружу с разработчиками и знаю, во что превращается макет
-          в проде. Верю, что хороший продукт — это внимание к деталям,
-          которое не замечаешь, но чувствуешь.
-        </p>
+        <a href="#work" class="cta" data-hover data-magnetic>
+          <span>View selected work</span>
+          <span class="cta__arrow">&#8599;</span>
+        </a>
       </div>
-      <div class="about__stats">
-        <div class="stat reveal" style="--d:0">
-          <span class="stat__num" data-count="60">0</span><span class="stat__plus">+</span>
-          <span class="stat__label">проектов</span>
-        </div>
-        <div class="stat reveal" style="--d:1">
-          <span class="stat__num" data-count="6">0</span>
-          <span class="stat__label">лет опыта</span>
-        </div>
-        <div class="stat reveal" style="--d:2">
-          <span class="stat__num" data-count="14">0</span>
-          <span class="stat__label">наград</span>
-        </div>
-        <div class="stat reveal" style="--d:3">
-          <span class="stat__num" data-count="100">0</span><span class="stat__plus">%</span>
-          <span class="stat__label">вовлечённости</span>
-        </div>
+    </section>
+
+    <!-- Ticker -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Strategy <i>&#10022;</i> Identity <i>&#10022;</i> Web <i>&#10022;</i> Motion <i>&#10022;</i> Product <i>&#10022;</i> Art&nbsp;Direction <i>&#10022;</i></span>
+        <span>Strategy <i>&#10022;</i> Identity <i>&#10022;</i> Web <i>&#10022;</i> Motion <i>&#10022;</i> Product <i>&#10022;</i> Art&nbsp;Direction <i>&#10022;</i></span>
       </div>
     </div>
-  </section>
 
-  <!-- Contact -->
-  <section class="contact" id="contact">
-    <div class="contact__inner reveal">
-      <p class="contact__eyebrow">Открыта к проектам</p>
-      <h2 class="contact__title">Давай сделаем<br />что-то классное.</h2>
-      <a href="mailto:hello@example.com" class="contact__mail">hello@example.com</a>
-      <div class="contact__socials">
-        <a href="#">Behance</a>
-        <a href="#">Dribbble</a>
-        <a href="#">Telegram</a>
-        <a href="#">LinkedIn</a>
+    <!-- Selected work -->
+    <section class="work" id="work">
+      <div class="work__head reveal">
+        <span>Selected work</span>
+        <span class="muted">( 2023 — 2026 )</span>
+      </div>
+
+      <ul class="work__list">
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">01</i><span class="row__name">Halcyon</span></span>
+            <span class="row__right"><i class="row__tags">Brand · Web</i><i class="row__year">2025</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">02</i><span class="row__name">Meridian</span></span>
+            <span class="row__right"><i class="row__tags">Product · UX</i><i class="row__year">2025</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">03</i><span class="row__name">Kōto Coffee</span></span>
+            <span class="row__right"><i class="row__tags">Identity · Packaging</i><i class="row__year">2024</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">04</i><span class="row__name">Fieldwork</span></span>
+            <span class="row__right"><i class="row__tags">Web · Motion</i><i class="row__year">2024</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">05</i><span class="row__name">Perigee</span></span>
+            <span class="row__right"><i class="row__tags">Product · Brand</i><i class="row__year">2023</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+        <li class="row reveal" data-hover data-cursor-text="View">
+          <a href="#" class="row__link">
+            <span class="row__left"><i class="row__idx">06</i><span class="row__name">Northbound</span></span>
+            <span class="row__right"><i class="row__tags">Web · Identity</i><i class="row__year">2023</i><i class="row__arrow">&#8599;</i></span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Statement -->
+    <section class="statement" id="studio">
+      <span class="statement__label reveal">( What we believe / 01 )</span>
+      <h2 class="statement__title reveal">
+        We treat taste as<br /><span class="serif">a competitive edge.</span>
+      </h2>
+      <p class="statement__sub reveal">
+        Every engagement starts with strategy and ends with something we are
+        proud to sign. No templates, no filler, no committee design.
+      </p>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="caps">
+      <div class="caps__head reveal">
+        <span>What we do</span>
+        <span class="muted">( 04 disciplines )</span>
+      </div>
+      <div class="caps__grid">
+        <article class="cap reveal">
+          <span class="cap__bar"></span>
+          <span class="cap__num">(01)</span>
+          <h3 class="cap__title">Strategy</h3>
+          <p>Positioning, naming and narrative that gives the brand a reason to exist.</p>
+        </article>
+        <article class="cap reveal">
+          <span class="cap__bar"></span>
+          <span class="cap__num">(02)</span>
+          <h3 class="cap__title">Identity</h3>
+          <p>Visual systems, art direction and type that stay recognisable everywhere.</p>
+        </article>
+        <article class="cap reveal">
+          <span class="cap__bar"></span>
+          <span class="cap__num">(03)</span>
+          <h3 class="cap__title">Web</h3>
+          <p>Design and build — motion, CMS and front-end that loads fast and feels alive.</p>
+        </article>
+        <article class="cap reveal">
+          <span class="cap__bar"></span>
+          <span class="cap__num">(04)</span>
+          <h3 class="cap__title">Product</h3>
+          <p>Interfaces, UX and design systems that scale without losing the details.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="footer__row">
+      <div class="footer__contact">
+        <span class="muted">( Get in touch )</span>
+        <h2 class="footer__cta">Let's make<br />something good.</h2>
+        <a href="mailto:hello@studionox.com" class="footer__mail" data-hover>hello@studionox.com</a>
+      </div>
+      <div class="footer__socials">
+        <span class="muted">Socials</span>
+        <a href="#" data-hover>Instagram</a>
+        <a href="#" data-hover>Are.na</a>
+        <a href="#" data-hover>LinkedIn</a>
+        <a href="#" data-hover>Twitter / X</a>
+        <span class="muted footer__clock">Berlin — <span data-clock>—:—</span> CET</span>
       </div>
     </div>
-  </section>
 
-  <footer class="footer">
-    <span>© 2026 Alina Venera</span>
-    <span>Сделано с любовью и вниманием к деталям</span>
+    <div class="footer__wordmark" aria-hidden="true">NOX</div>
+
+    <div class="footer__bar">
+      <span class="muted">© 2026 Studio Nox — All rights reserved</span>
+      <button class="footer__top" data-hover id="toTop">Back to top &#8593;</button>
+    </div>
   </footer>
 
   <script src="js/main.js"></script>
