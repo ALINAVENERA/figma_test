@@ -51,15 +51,15 @@
     if (theme === "dark") root.setAttribute("data-theme", "dark");
     else root.removeAttribute("data-theme");
     toggle.textContent = theme === "dark" ? "[ light ]" : "[ dark ]";
-    refreshTorusColors();
   };
+  applyTheme(localStorage.getItem("rt-theme") || "light");
   toggle.addEventListener("click", () => {
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     applyTheme(next);
     localStorage.setItem("rt-theme", next);
   });
 
-  /* ---------- Scramble / decode effect ---------- */
+  /* ---------- Scramble / decode ---------- */
   const GLYPHS = "!<>-_\\/[]{}=+*^?#·→";
   function scramble(el, duration = 600) {
     if (reduceMotion) return;
@@ -79,7 +79,6 @@
     };
     requestAnimationFrame(step);
   }
-  // on viewport entry
   const scrambleIO = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -92,7 +91,6 @@
     { threshold: 0.5 }
   );
   document.querySelectorAll("[data-scramble-in]").forEach((el) => scrambleIO.observe(el));
-  // on hover
   document.querySelectorAll("[data-scramble]").forEach((el) => {
     let busy = false;
     el.addEventListener("mouseenter", () => {
@@ -129,21 +127,6 @@
     { threshold: 0.6 }
   );
   counters.forEach((el) => countIO.observe(el));
-
-  /* ---------- Process step activation ---------- */
-  const steps = document.querySelectorAll(".step");
-  const stepIO = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("done");
-          stepIO.unobserve(e.target);
-        }
-      });
-    },
-    { threshold: 0.7 }
-  );
-  steps.forEach((s) => stepIO.observe(s));
 
   /* ---------- FAQ accordion ---------- */
   document.querySelectorAll(".faq__q").forEach((btn) => {
@@ -187,157 +170,16 @@
   }
 
   /* ============================================================
-     ASCII 3D torus — hand-rolled donut, mono glyphs, zero deps
-     ============================================================ */
-  const canvas = document.getElementById("torus");
-  let torusColors = { fg: "#1A1A1A", muted: "#5F5E5A", accent: "#FF4A1C" };
-  function refreshTorusColors() {
-    const cs = getComputedStyle(root);
-    torusColors = {
-      fg: cs.getPropertyValue("--fg").trim() || "#1A1A1A",
-      muted: cs.getPropertyValue("--fg-muted").trim() || "#5F5E5A",
-      accent: cs.getPropertyValue("--accent").trim() || "#FF4A1C",
-    };
-  }
-
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
-    const CHARS = ".,-~:;=!*#$@";
-    const CW = 9, CH = 13, FONT = "12px 'JetBrains Mono', monospace";
-    let W = 0, H = 0, COLS = 0, ROWS = 0, K1 = 0;
-    let A = 0.9, B = 0.4;          // rotation angles
-    let tiltX = 0, tiltY = 0;       // mouse influence (lerped)
-    let running = false;
-    let frames = 0, fpsAt = performance.now();
-    const fpsEl = document.querySelector("[data-fps]");
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    function resize() {
-      const r = canvas.getBoundingClientRect();
-      W = r.width; H = r.height;
-      canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      COLS = Math.floor(W / CW);
-      ROWS = Math.floor(H / CH);
-      K1 = Math.min(W, H) * 0.62;
-      ctx.font = FONT;
-      ctx.textBaseline = "top";
-    }
-    resize();
-    addEventListener("resize", resize);
-
-    // mouse tilt over the hero figure
-    const fig = canvas.closest(".hero__fig");
-    if (fig && finePointer) {
-      fig.addEventListener("mousemove", (e) => {
-        const r = fig.getBoundingClientRect();
-        tiltY = ((e.clientX - r.left) / r.width - 0.5) * 0.9;
-        tiltX = ((e.clientY - r.top) / r.height - 0.5) * 0.9;
-      });
-      fig.addEventListener("mouseleave", () => { tiltX = 0; tiltY = 0; });
-    }
-
-    const R1 = 1, R2 = 2, K2 = 5;
-    let a = 0, b = 0; // smoothed angles incl. tilt
-
-    function frame() {
-      if (!running) return;
-      A += 0.014; B += 0.007;
-      a += (A + tiltX - a) * 0.08;
-      b += (B + tiltY - b) * 0.08;
-
-      const cosA = Math.cos(a), sinA = Math.sin(a);
-      const cosB = Math.cos(b), sinB = Math.sin(b);
-
-      const zbuf = new Float32Array(COLS * ROWS);
-      const cbuf = new Int16Array(COLS * ROWS).fill(-1);
-      const abuf = new Uint8Array(COLS * ROWS);
-
-      let ti = 0;
-      for (let theta = 0; theta < 6.28; theta += 0.07) {
-        const cosT = Math.cos(theta), sinT = Math.sin(theta);
-        let pi2 = 0;
-        for (let phi = 0; phi < 6.28; phi += 0.03) {
-          const cosP = Math.cos(phi), sinP = Math.sin(phi);
-          const circleX = R2 + R1 * cosT;
-          const circleY = R1 * sinT;
-
-          const x = circleX * (cosB * cosP + sinA * sinB * sinP) - circleY * cosA * sinB;
-          const y = circleX * (sinB * cosP - sinA * cosB * sinP) + circleY * cosA * cosB;
-          const z = K2 + cosA * circleX * sinP + circleY * sinA;
-          const ooz = 1 / z;
-
-          const xp = (W / 2 + K1 * ooz * x) / CW | 0;
-          const yp = (H / 2 - K1 * ooz * y) / CH | 0;
-
-          if (xp < 0 || xp >= COLS || yp < 0 || yp >= ROWS) { pi2++; continue; }
-
-          const L = cosP * cosT * sinB - cosA * cosT * sinP - sinA * sinT + cosB * (cosA * sinT - cosT * sinA * sinP);
-          const idx = xp + yp * COLS;
-          if (ooz > zbuf[idx]) {
-            zbuf[idx] = ooz;
-            cbuf[idx] = L > 0 ? Math.min(CHARS.length - 1, (L * 8) | 0) : 0;
-            abuf[idx] = ((ti * 131 + pi2) % 97 === 0) ? 1 : 0;
-          }
-          pi2++;
-        }
-        ti++;
-      }
-
-      ctx.clearRect(0, 0, W, H);
-      for (let ry = 0; ry < ROWS; ry++) {
-        for (let rx = 0; rx < COLS; rx++) {
-          const idx = rx + ry * COLS;
-          const c = cbuf[idx];
-          if (c < 0) continue;
-          if (abuf[idx]) ctx.fillStyle = torusColors.accent;
-          else ctx.fillStyle = c > 6 ? torusColors.fg : torusColors.muted;
-          ctx.fillText(CHARS[c], rx * CW, ry * CH);
-        }
-      }
-
-      // fps meter
-      frames++;
-      const now = performance.now();
-      if (now - fpsAt >= 1000) {
-        if (fpsEl) fpsEl.textContent = frames + " fps";
-        frames = 0; fpsAt = now;
-      }
-
-      requestAnimationFrame(frame);
-    }
-
-    refreshTorusColors();
-
-    if (reduceMotion) {
-      // single static frame
-      running = true; frame(); running = false;
-    } else {
-      const visIO = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          const wasRunning = running;
-          running = e.isIntersecting;
-          if (running && !wasRunning) requestAnimationFrame(frame);
-        });
-      }, { threshold: 0.05 });
-      visIO.observe(canvas);
-    }
-  }
-
-  // apply theme AFTER torus color refs exist
-  applyTheme(localStorage.getItem("rt-theme") || "light");
-
-  /* ============================================================
-     Chat demo — simulated first-line dialog, loops forever
+     Chat demo — the hero: agent answers live, loops forever
      ============================================================ */
   const chatBody = document.querySelector("[data-chat-body]");
   const chatMeta = document.querySelector("[data-chat-meta]");
   if (chatBody) {
     const SCRIPT = [
       { who: "user", text: "Здравствуйте! Оплатила курс, а доступ не пришёл. Заказ №4821" },
-      { who: "agent", text: "Проверила заказ №4821: оплата прошла в 14:02, письмо с доступом ушло на p***@gmail.com. Продублировала ссылку сюда. Если письма нет — загляните в «Промоакции»." },
+      { who: "agent", text: "Проверила заказ №4821: оплата прошла в 14:02, письмо ушло на p***@gmail.com. Продублировала ссылку сюда — проверьте «Промоакции»." },
       { who: "user", text: "Нашла, спасибо!" },
-      { who: "agent", text: "Отлично. Доступ активен 365 дней. Если что-то ещё — я тут 24/7. Хорошего обучения!" },
+      { who: "agent", text: "Отлично. Доступ активен 365 дней. Я тут 24/7 — хорошего обучения!" },
     ];
     const FINAL_META = "[закрыто без оператора — 47 сек — CSAT 5/5]";
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -385,7 +227,6 @@
             await wait(reduceMotion ? 300 : 1100);
           } else {
             const t = addMsg("agent");
-            t.span.classList.add("msg--typing-inner");
             const typing = document.createElement("span");
             typing.className = "msg--typing";
             typing.textContent = "· · ·";

@@ -28,9 +28,7 @@
     <a href="#top" class="meta__brand">Routine<span class="meta__suffix">[R]</span></a>
     <nav class="meta__nav mono">
       <a href="#product" data-hover data-scramble>Продукт</a>
-      <a href="#demo" data-hover data-scramble>Демо</a>
       <a href="#process" data-hover data-scramble>Процесс</a>
-      <a href="#numbers" data-hover data-scramble>Цифры</a>
       <a href="#faq" data-hover data-scramble>Вопросы</a>
       <a href="#contact" data-hover data-scramble>Связь</a>
     </nav>
@@ -41,7 +39,7 @@
   </header>
 
   <main id="top">
-    <!-- [00] Hero -->
+    <!-- [00] Hero: заявление + живое демо -->
     <section class="hero">
       <div class="hero__grid">
         <div class="hero__copy">
@@ -58,35 +56,33 @@
           </h1>
 
           <p class="hero__lede">
-            За 3 недели — с вашим тоном голоса, интеграциями в Bitrix24, amoCRM
-            и Telegram. Не шаблонный чат-бот — проектируем агентную систему
+            За 3 недели — с вашим тоном голоса, интеграциями в Bitrix24,
+            amoCRM и Telegram. Не шаблонный чат-бот — агентная система
             под ваши сценарии.
           </p>
 
           <div class="hero__ctas">
             <a href="#contact" class="btn btn--primary" data-hover>Оставить заявку <span class="arrow">&#8594;</span></a>
-            <a href="#demo" class="btn btn--ghost" data-hover>Смотреть демо <span class="arrow">&#8594;</span></a>
+            <a href="#process" class="btn btn--ghost" data-hover>Как это работает <span class="arrow">&#8594;</span></a>
           </div>
         </div>
 
-        <figure class="hero__fig" data-hover>
-          <figcaption class="fig__caption mono">
-            <span>[fig.01] agent-graph</span>
-            <span class="fig__fps" data-fps>60 fps</span>
-          </figcaption>
-          <canvas class="fig__canvas" id="torus" aria-label="Вращающийся 3D-граф из моноширинных символов"></canvas>
-          <div class="fig__foot mono">
-            <span>rev 2.4.1</span>
-            <span>&#8734; loop</span>
-            <span>msg/day: 12 480</span>
-          </div>
-        </figure>
+        <div class="chat reveal" id="chat" data-hover>
+          <header class="chat__head mono">
+            <span class="chat__title">[demo] routine-agent &#183; Telegram</span>
+            <span class="chat__status"><span class="dot"></span>online</span>
+          </header>
+          <div class="chat__body" data-chat-body></div>
+          <footer class="chat__foot mono">
+            <span data-chat-meta></span>
+          </footer>
+        </div>
       </div>
 
       <div class="hero__proof">
         <div class="proof">
           <span class="proof__k"><span data-count="78">0</span><i class="accent">%</i></span>
-          <span class="proof__v">закрытых обращений без оператора на первой линии</span>
+          <span class="proof__v">обращений закрыто без оператора</span>
         </div>
         <div class="proof">
           <span class="proof__k"><span data-count="95">0</span><i class="accent">%</i></span>
@@ -94,27 +90,21 @@
         </div>
         <div class="proof">
           <span class="proof__k">3 <i class="proof__unit">нед</i></span>
-          <span class="proof__v">до пилота, если процессы и база знаний готовы</span>
+          <span class="proof__v">от kick-off до пилота</span>
         </div>
         <div class="proof">
           <span class="proof__k">24/7</span>
-          <span class="proof__v">первая линия отвечает ночью, в выходные и в пики</span>
+          <span class="proof__v">ночью, в выходные и в пики</span>
         </div>
       </div>
     </section>
 
-    <!-- Ticker: two counter-directional rows -->
+    <!-- Ticker -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker__row mono">
         <div class="ticker__track">
           <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; WhatsApp &#8594; HubSpot &#8594; SIP &#8594; Mango Office &#8594; RAG &#8594; Eval &#8594; Widget &#8594; email &#8594;&nbsp;</span>
           <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; WhatsApp &#8594; HubSpot &#8594; SIP &#8594; Mango Office &#8594; RAG &#8594; Eval &#8594; Widget &#8594; email &#8594;&nbsp;</span>
-        </div>
-      </div>
-      <div class="ticker__row ticker__row--reverse mono">
-        <div class="ticker__track">
-          <span>78% автономно &#183; TTR 12 сек &#183; 500+ диалогов в аудите &#183; 100 кейсов в eval &#183; эскалация &lt; 3% &#183; NDA до старта &#183;&nbsp;</span>
-          <span>78% автономно &#183; TTR 12 сек &#183; 500+ диалогов в аудите &#183; 100 кейсов в eval &#183; эскалация &lt; 3% &#183; NDA до старта &#183;&nbsp;</span>
         </div>
       </div>
     </div>
@@ -135,7 +125,7 @@
             <span class="num mono card__idx">[A]</span>
             <h3>Агент первой линии</h3>
           </header>
-          <p>Отвечает на 70–80% обращений без человека. Знает ваш продукт, тарифы, политику возвратов. Эскалирует, если не уверен.</p>
+          <p>Отвечает на 70–80% обращений без человека. Знает продукт, тарифы, политику возвратов. Эскалирует, если не уверен.</p>
           <div class="card__tags mono">
             <span>Telegram</span><span>WhatsApp</span><span>Widget</span><span>email</span>
           </div>
@@ -145,7 +135,7 @@
             <span class="num mono card__idx">[B]</span>
             <h3>Разметка входящих</h3>
           </header>
-          <p>Классифицирует обращения по типу, срочности, клиенту. Прокидывает в CRM. Оператор открывает уже отсортированную очередь.</p>
+          <p>Классифицирует обращения по типу, срочности, клиенту. Оператор открывает уже отсортированную очередь.</p>
           <div class="card__tags mono">
             <span>Bitrix24</span><span>amoCRM</span><span>HubSpot</span>
           </div>
@@ -155,7 +145,7 @@
             <span class="num mono card__idx">[C]</span>
             <h3>Voice-агент</h3>
           </header>
-          <p>Принимает и совершает звонки — запись, бронь, подтверждение заказа. Передаёт на человека со всей историей разговора.</p>
+          <p>Принимает и совершает звонки — запись, бронь, подтверждение. Передаёт человеку со всей историей.</p>
           <div class="card__tags mono">
             <span>Telephony</span><span>SIP</span><span>Mango Office</span>
           </div>
@@ -163,131 +153,46 @@
       </div>
     </section>
 
-    <!-- [02] Демо -->
-    <section class="section" id="demo">
-      <div class="demo__grid">
-        <div class="demo__copy reveal">
-          <div class="section__meta mono">
-            <span class="num">[02]</span>
-            <span class="eyebrow" data-scramble-in>Демо</span>
-          </div>
-          <h2 class="section__title">Так отвечает первая линия.</h2>
-          <p class="section__intro">
-            Реальный сценарий из пилота онлайн-школы. Агент видит заказ, статус
-            оплаты и политику доступов — отвечает за секунды, эскалирует, когда
-            не уверен.
-          </p>
-          <ul class="demo__notes mono">
-            <li>&#8594; ретрив по базе знаний и CRM</li>
-            <li>&#8594; тон голоса — ваш, не «ботовский»</li>
-            <li>&#8594; порог уверенности настраивается</li>
-            <li>&#8594; вся история сохраняется в CRM</li>
-          </ul>
-        </div>
-
-        <div class="chat reveal" id="chat" data-hover>
-          <header class="chat__head mono">
-            <span class="chat__title">[demo] routine-agent &#183; Telegram</span>
-            <span class="chat__status"><span class="dot"></span>online</span>
-          </header>
-          <div class="chat__body" data-chat-body></div>
-          <footer class="chat__foot mono">
-            <span data-chat-meta></span>
-          </footer>
-        </div>
-      </div>
-    </section>
-
-    <!-- [03] Процесс -->
+    <!-- [02] Процесс -->
     <section class="section" id="process">
       <div class="section__head reveal">
         <div class="section__meta mono">
-          <span class="num">[03]</span>
+          <span class="num">[02]</span>
           <span class="eyebrow" data-scramble-in>Процесс</span>
         </div>
         <h2 class="section__title">От kick-off до прод — 3 недели.</h2>
-        <p class="section__intro">Не проект, а подписка. После запуска — продолжаем тюнить метрики каждую итерацию.</p>
+        <p class="section__intro">Не проект, а подписка: после запуска продолжаем тюнить метрики.</p>
       </div>
 
-      <ol class="steps">
-        <li class="step reveal" data-hover>
-          <span class="step__num mono">[01]</span>
-          <span class="step__w mono">1 нед</span>
-          <div class="step__body">
-            <h4>Аудит и разметка</h4>
-            <p>Анализируем 500+ реальных диалогов. Находим топ-20 сценариев. Сверяем tone-of-voice.</p>
-          </div>
-          <span class="step__arrow">&#8594;</span>
+      <ol class="pstrip reveal">
+        <li class="pstep">
+          <span class="pstep__meta mono">[01] &#183; 1 нед</span>
+          <h4>Аудит</h4>
+          <p>500+ диалогов, топ-20 сценариев, tone-of-voice.</p>
         </li>
-        <li class="step reveal" data-hover>
-          <span class="step__num mono">[02]</span>
-          <span class="step__w mono">1 нед</span>
-          <div class="step__body">
-            <h4>Сборка и интеграция</h4>
-            <p>Поднимаем LLM-обвязку. Подключаем Bitrix24 / amoCRM. Пишем промпты и ретрив под ваш продукт.</p>
-          </div>
-          <span class="step__arrow">&#8594;</span>
+        <li class="pstep">
+          <span class="pstep__meta mono">[02] &#183; 1 нед</span>
+          <h4>Сборка</h4>
+          <p>LLM-обвязка, интеграции, промпты и ретрив.</p>
         </li>
-        <li class="step reveal" data-hover>
-          <span class="step__num mono">[03]</span>
-          <span class="step__w mono">1 нед</span>
-          <div class="step__body">
-            <h4>Пилот и запуск</h4>
-            <p>Запускаем на 10% трафика, каждый день ревьюим ответы. Снимаем метрики, выкатываем на 100%.</p>
-          </div>
-          <span class="step__arrow">&#8594;</span>
+        <li class="pstep">
+          <span class="pstep__meta mono">[03] &#183; 1 нед</span>
+          <h4>Пилот</h4>
+          <p>10% трафика, ежедневное ревью, выкат на 100%.</p>
         </li>
-        <li class="step reveal" data-hover>
-          <span class="step__num mono">[04]</span>
-          <span class="step__w mono">&#8734;</span>
-          <div class="step__body">
-            <h4>Поддержка и рост</h4>
-            <p>Раз в 2 недели — отчёт, пополнение базы знаний, A/B промптов. Включены в подписку.</p>
-          </div>
-          <span class="step__arrow">&#8594;</span>
+        <li class="pstep">
+          <span class="pstep__meta mono">[04] &#183; &#8734;</span>
+          <h4>Рост</h4>
+          <p>Отчёты раз в 2 недели, база знаний, A/B промптов.</p>
         </li>
       </ol>
     </section>
 
-    <!-- [04] Цифры -->
-    <section class="section section--ruled" id="numbers">
-      <div class="section__head reveal">
-        <div class="section__meta mono">
-          <span class="num">[04]</span>
-          <span class="eyebrow" data-scramble-in>Цифры</span>
-        </div>
-        <h2 class="section__title">Как выглядит пилот в цифрах.</h2>
-      </div>
-
-      <div class="stats">
-        <div class="stat reveal">
-          <span class="stat__k"><span data-count="78">0</span><i class="accent">%</i></span>
-          <span class="stat__l">Закрытых обращений без оператора</span>
-          <span class="stat__s mono">ориентир для первой линии после настройки</span>
-        </div>
-        <div class="stat reveal">
-          <span class="stat__k"><span data-count="95">0</span><i class="accent">%</i></span>
-          <span class="stat__l">Совпадение с ожидаемым ответом</span>
-          <span class="stat__s mono">eval по 100 кейсам в рабочем графе</span>
-        </div>
-        <div class="stat reveal">
-          <span class="stat__k">3 <i class="stat__unit">нед</i></span>
-          <span class="stat__l">До запуска пилота</span>
-          <span class="stat__s mono">если есть доступ к процессам и базе знаний</span>
-        </div>
-        <div class="stat reveal">
-          <span class="stat__k">24/7</span>
-          <span class="stat__l">Первая линия без выходных</span>
-          <span class="stat__s mono">агент отвечает ночью, в выходные и в пики</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- [05] Вопросы -->
+    <!-- [03] Вопросы -->
     <section class="section" id="faq">
       <div class="section__head reveal">
         <div class="section__meta mono">
-          <span class="num">[05]</span>
+          <span class="num">[03]</span>
           <span class="eyebrow" data-scramble-in>Вопросы</span>
         </div>
         <h2 class="section__title">Что обычно спрашивают.</h2>
@@ -300,7 +205,7 @@
             <span class="faq__text">Это кастомная система или шаблонный бот?</span>
             <span class="faq__icon mono">&#8722;</span>
           </button>
-          <div class="faq__a-wrap"><div class="faq__a">Кастомная система. Настраиваем ретрив по вашей базе знаний, маршрутизацию, гардрэйлы и эвалы под конкретные сценарии поддержки. LLM-провайдера подбираем под задачу и инфраструктуру.</div></div>
+          <div class="faq__a-wrap"><div class="faq__a">Кастомная: ретрив по вашей базе знаний, маршрутизация, гардрэйлы и эвалы под ваши сценарии. LLM-провайдер — под задачу.</div></div>
         </li>
         <li class="faq__item">
           <button class="faq__q" data-hover aria-expanded="false">
@@ -308,7 +213,7 @@
             <span class="faq__text">Что если агент ответит что-то не то?</span>
             <span class="faq__icon mono">+</span>
           </button>
-          <div class="faq__a-wrap"><div class="faq__a">На пилоте ревьюим ответы вручную, смотрим эвалы и докручиваем пороги уверенности. Если сценарий не закрывается надёжно — агент эскалирует диалог на человека.</div></div>
+          <div class="faq__a-wrap"><div class="faq__a">На пилоте ревьюим ответы вручную и докручиваем пороги уверенности. Ненадёжный сценарий — эскалация на человека.</div></div>
         </li>
         <li class="faq__item">
           <button class="faq__q" data-hover aria-expanded="false">
@@ -316,43 +221,34 @@
             <span class="faq__text">Сколько это стоит?</span>
             <span class="faq__icon mono">+</span>
           </button>
-          <div class="faq__a-wrap"><div class="faq__a">От 350 000 ₽ внедрение + от 80 000 ₽/мес подписка. Подписка включает поддержку, апдейты базы знаний, мониторинг. Цена фиксируется на 12 месяцев.</div></div>
+          <div class="faq__a-wrap"><div class="faq__a">От 350 000 ₽ внедрение + от 80 000 ₽/мес подписка (поддержка, база знаний, мониторинг). Цена фиксируется на 12 месяцев.</div></div>
         </li>
         <li class="faq__item">
           <button class="faq__q" data-hover aria-expanded="false">
             <span class="faq__n mono">Q&#183;04</span>
-            <span class="faq__text">Работаете с маленькими командами?</span>
-            <span class="faq__icon mono">+</span>
-          </button>
-          <div class="faq__a-wrap"><div class="faq__a">Да, если у вас 500+ обращений в месяц. Меньше — берём реже, потому что ROI не сходится для нас и для вас.</div></div>
-        </li>
-        <li class="faq__item">
-          <button class="faq__q" data-hover aria-expanded="false">
-            <span class="faq__n mono">Q&#183;05</span>
             <span class="faq__text">Данные клиентов где хранятся?</span>
             <span class="faq__icon mono">+</span>
           </button>
-          <div class="faq__a-wrap"><div class="faq__a">Всё в вашем контуре или в РФ-облаке по вашему выбору. Подписываем NDA и DPA до начала работ. LLM-провайдер — без обучения на ваших данных.</div></div>
+          <div class="faq__a-wrap"><div class="faq__a">В вашем контуре или РФ-облаке. NDA и DPA — до начала работ. LLM-провайдер без обучения на ваших данных.</div></div>
         </li>
       </ul>
     </section>
 
-    <!-- [06] Связь -->
+    <!-- [04] Связь -->
     <section class="section cta" id="contact">
       <div class="section__head reveal">
         <div class="section__meta mono">
-          <span class="num">[06]</span>
+          <span class="num">[04]</span>
           <span class="eyebrow" data-scramble-in>Связь</span>
         </div>
         <h2 class="section__title">Оставьте заявку —<br />пришлём аудит за 2 дня<i class="accent">.</i></h2>
-        <p class="section__intro">Или напишите в Telegram. Отвечает человек, не агент — по крайней мере, пока.</p>
       </div>
 
       <div class="cta__actions reveal">
         <a href="mailto:team@routine.ai" class="btn btn--primary btn--lg" data-hover>Оставить заявку <span class="arrow">&#8594;</span></a>
         <a href="#" class="btn btn--ghost btn--lg" data-hover>Telegram @routine_team <span class="arrow">&#8599;</span></a>
       </div>
-      <p class="cta__caption mono reveal">team@routine.ai &#183; Москва &#183; Пн–Пт 10:00–19:00 &#183; Ответим в течение 2 часов. NDA подпишем до обсуждения.</p>
+      <p class="cta__caption mono reveal">team@routine.ai &#183; Москва &#183; Пн–Пт 10:00–19:00 &#183; ответим в течение 2 часов &#183; NDA до обсуждения</p>
     </section>
   </main>
 
