@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alina Venera — Product Designer</title>
+  <meta name="description" content="Портфолио продуктового дизайнера: проекты, подход, контакты." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo">AV<span>.</span></a>
+    <nav class="nav__links">
+      <a href="#work">Работы</a>
+      <a href="#about">Обо мне</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Сменить тему">
+      <span class="theme-toggle__icon">☾</span>
+    </button>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero__inner">
+      <p class="hero__eyebrow reveal">Product Designer · Санкт-Петербург</p>
+      <h1 class="hero__title">
+        <span class="reveal" style="--d:0">Придумываю</span>
+        <span class="reveal" style="--d:1">интерфейсы, которые</span>
+        <span class="reveal hero__accent" style="--d:2">приятно трогать.</span>
+      </h1>
+      <p class="hero__lead reveal" style="--d:3">
+        Проектирую продукты от идеи до пикселя — исследование, прототип,
+        интерфейс и та самая мелкая анимация, из-за которой хочется вернуться.
+      </p>
+      <div class="hero__cta reveal" style="--d:4">
+        <a href="#work" class="btn btn--primary">Смотреть работы</a>
+        <a href="#contact" class="btn btn--ghost">Написать мне</a>
+      </div>
+    </div>
+    <div class="hero__scroll reveal" style="--d:5">
+      <span>Листай вниз</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>UX/UI · Прототипы · Дизайн-системы · Моушн · Исследования · Веб · Мобайл ·&nbsp;</span>
+      <span>UX/UI · Прототипы · Дизайн-системы · Моушн · Исследования · Веб · Мобайл ·&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- Work -->
+  <section class="work" id="work">
+    <div class="section-head">
+      <h2 class="section-title reveal">Избранные проекты</h2>
+      <p class="section-sub reveal" style="--d:1">2023 — 2026</p>
+    </div>
+
+    <div class="work__grid">
+      <a class="card reveal" href="#" style="--d:0">
+        <div class="card__media card__media--1">
+          <span class="card__index">01</span>
+        </div>
+        <div class="card__body">
+          <h3>Nova Banking</h3>
+          <p>Редизайн мобильного банка. −38% времени на перевод.</p>
+          <div class="card__tags"><span>Mobile</span><span>Fintech</span></div>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#" style="--d:1">
+        <div class="card__media card__media--2">
+          <span class="card__index">02</span>
+        </div>
+        <div class="card__body">
+          <h3>Orbit CRM</h3>
+          <p>Дизайн-система для B2B-платформы. 120+ компонентов.</p>
+          <div class="card__tags"><span>Web</span><span>Design System</span></div>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#" style="--d:2">
+        <div class="card__media card__media--3">
+          <span class="card__index">03</span>
+        </div>
+        <div class="card__body">
+          <h3>Lumen Health</h3>
+          <p>Приложение для трекинга сна с мягкой моушн-подачей.</p>
+          <div class="card__tags"><span>Mobile</span><span>Health</span></div>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#" style="--d:3">
+        <div class="card__media card__media--4">
+          <span class="card__index">04</span>
+        </div>
+        <div class="card__body">
+          <h3>Field Notes</h3>
+          <p>Лендинг для стартапа. Собрал 4к подписок за неделю.</p>
+          <div class="card__tags"><span>Web</span><span>Landing</span></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="about__grid">
+      <div class="about__text reveal">
+        <h2 class="section-title">Обо мне</h2>
+        <p>
+          Привет! Я Алина — продуктовый дизайнер с 6 годами практики.
+          Люблю задачи, где нужно распутать сложное и превратить его
+          в интерфейс, который понятен без инструкции.
+        </p>
+        <p>
+          Работаю на стыке дизайна и кода: сама верстаю прототипы,
+          дружу с разработчиками и знаю, во что превращается макет
+          в проде. Верю, что хороший продукт — это внимание к деталям,
+          которое не замечаешь, но чувствуешь.
+        </p>
+      </div>
+      <div class="about__stats">
+        <div class="stat reveal" style="--d:0">
+          <span class="stat__num" data-count="60">0</span><span class="stat__plus">+</span>
+          <span class="stat__label">проектов</span>
+        </div>
+        <div class="stat reveal" style="--d:1">
+          <span class="stat__num" data-count="6">0</span>
+          <span class="stat__label">лет опыта</span>
+        </div>
+        <div class="stat reveal" style="--d:2">
+          <span class="stat__num" data-count="14">0</span>
+          <span class="stat__label">наград</span>
+        </div>
+        <div class="stat reveal" style="--d:3">
+          <span class="stat__num" data-count="100">0</span><span class="stat__plus">%</span>
+          <span class="stat__label">вовлечённости</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact__inner reveal">
+      <p class="contact__eyebrow">Открыта к проектам</p>
+      <h2 class="contact__title">Давай сделаем<br />что-то классное.</h2>
+      <a href="mailto:hello@example.com" class="contact__mail">hello@example.com</a>
+      <div class="contact__socials">
+        <a href="#">Behance</a>
+        <a href="#">Dribbble</a>
+        <a href="#">Telegram</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>© 2026 Alina Venera</span>
+    <span>Сделано с любовью и вниманием к деталям</span>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
