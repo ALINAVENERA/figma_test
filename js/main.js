@@ -357,7 +357,7 @@
     const PHI = 1.16;        // horizontal half-FOV — sides foreshorten
     const SIN_P = Math.sin(PHI);
     const BOW = 0.5;        // vertical spread at the sides → the arced silhouette
-    const PANEL = 0.72;      // panel height as a share of the field, before bowing
+    const PANEL = 0.58;      // panel height as a share of the field, before bowing
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -443,15 +443,16 @@
 
           // --- concave cylinder: horizontal foreshortening toward the sides ---
           const x = cxc + (W / 2) * (Math.sin(u * PHI) / SIN_P);
-          // --- the sides swing toward the viewer: rows converge there,
-          //     so the top arc drops and the bottom arc lifts at the edges ---
-          const spread = 1 - BOW * u * u;
+          // --- the sides swing toward the viewer, so they magnify:
+          //     rows spread apart there and the panel grows taller ---
+          const spread = 1 + BOW * u * u;
           const y = cyc + halfPanel * v * spread;
 
           if (x < -GAP || x > W + GAP || y < -GAP || y > H + GAP) continue;
 
           const rn = Math.abs(u);           // 0 centre → 1 side
-          const bend = 0.7 + 0.5 * (1 - rn * rn); // depth cue for size
+          // nearer surface = bigger, brighter dots at the edges
+          const bend = 0.78 + 0.62 * rn * rn;
 
           // copy areas keep a whisper of texture and never get the ripple
           const behindText = inSafeRect(x, y);
@@ -478,15 +479,15 @@
           // sparse static accent nodes
           if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
 
-          // the screen faces us at the centre and turns away at the sides
-          alpha *= 1 - Math.pow(rn, 2.2) * 0.34;
+          // the centre is the far wall, the edges are right in front of us
+          alpha *= 0.72 + 0.5 * rn * rn;
           // soften the very top and bottom rows so the arcs read as edges, not cuts
           alpha *= 1 - Math.pow(Math.abs(v), 14) * 0.9;
           if (alpha <= 0.02) continue;
 
           ctx.globalAlpha = Math.min(alpha, 0.95);
           ctx.fillStyle = accent ? colors.accent : colors.dot;
-          const s = Math.max(size * Math.pow(bend, 1.7), 0.45);
+          const s = Math.max(size * bend, 0.45);
           ctx.fillRect(x - s / 2, y - s / 2, s, s);
         }
       }
