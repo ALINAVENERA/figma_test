@@ -353,7 +353,8 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const GAP = 30;          // grid spacing (css px)
     const DOT = 2.7;         // base dot size
-    const CURVE = 0.34;      // pincushion strength — the "curved screen" bend
+    const THETA = 1.34;      // fisheye field of view — we sit *inside* the sphere
+    const SIN_T = Math.sin(THETA);
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -435,10 +436,11 @@
           const gxp = ox + gx * GAP;
           const gyp = oy + gy * GAP;
 
-          // --- curved screen: pincushion bend toward the centre ---
+          // --- inside-a-sphere fisheye: centre spreads out, rim packs together ---
           const rx = gxp - cxc, ry = gyp - cyc;
           const rn = Math.sqrt(rx * rx + ry * ry) / halfDiag; // 0 centre → 1 corner
-          const bend = 1 - CURVE * rn * rn;
+          // sin-mapping keeps rn=1 pinned to the corner, so dots reach every edge
+          const bend = rn < 0.0001 ? THETA / SIN_T : Math.sin(rn * THETA) / (rn * SIN_T);
           const x = cxc + rx * bend;
           const y = cyc + ry * bend;
 
@@ -469,13 +471,13 @@
           // sparse static accent nodes
           if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
 
-          // gentle rim falloff — only the far corners recede
-          alpha *= 1 - Math.pow(rn, 3) * 0.55;
+          // the rim is the far wall of the sphere: slightly dimmer, never empty
+          alpha *= 1 - Math.pow(rn, 2.6) * 0.42;
           if (alpha <= 0.02) continue;
 
           ctx.globalAlpha = Math.min(alpha, 0.95);
           ctx.fillStyle = accent ? colors.accent : colors.dot;
-          const s = Math.max(size * bend, 0.5);
+          const s = Math.max(size * Math.pow(bend, 1.7), 0.45);
           ctx.fillRect(x - s / 2, y - s / 2, s, s);
         }
       }
