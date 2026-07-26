@@ -352,37 +352,68 @@
     const ctx = field.getContext("2d");
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const GAP = 30;          // grid spacing (css px)
-    const DOT = 2.4;         // base dot size
+    const DOT = 2.7;         // base dot size
+    const CURVE = 0.34;      // pincushion strength — the "curved screen" bend
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
     let running = true;
     const R = 150;           // cursor influence radius
+    let safeRects = [];      // areas where text lives — no dots drawn there
 
     function readColors() {
       const cs = getComputedStyle(document.documentElement);
       colors.dot = cs.getPropertyValue("--fg-muted").trim() || "#5F5E5A";
       colors.accent = cs.getPropertyValue("--accent").trim() || "#FF4A1C";
     }
+    // text zones are punched out of the grid so copy stays crisp
+    function measureSafeRects() {
+      const fr = field.getBoundingClientRect();
+      const pad = 14;
+      const sel = ".hero__meta, .hero__title, .hero__lede, .hero__ctas, .chat, .proof";
+      safeRects = Array.from(document.querySelectorAll(sel)).map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          x1: r.left - fr.left - pad,
+          y1: r.top - fr.top - pad,
+          x2: r.right - fr.left + pad,
+          y2: r.bottom - fr.top + pad,
+        };
+      });
+    }
+    function inSafeRect(x, y) {
+      for (let i = 0; i < safeRects.length; i++) {
+        const s = safeRects[i];
+        if (x > s.x1 && x < s.x2 && y > s.y1 && y < s.y2) return true;
+      }
+      return false;
+    }
+
     function resize() {
       const r = field.getBoundingClientRect();
       W = r.width; H = r.height;
       field.width = W * dpr; field.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.ceil(W / GAP) + 1;
-      rows = Math.ceil(H / GAP) + 1;
+      // overscan the grid so bent edge dots still cover the rim
+      cols = Math.ceil(W / GAP) + 5;
+      rows = Math.ceil(H / GAP) + 5;
+      measureSafeRects();
     }
     readColors();
     resize();
     window.addEventListener("resize", resize, { passive: true });
+    // re-measure as fonts settle and the chat demo grows
+    setTimeout(measureSafeRects, 400);
+    setTimeout(measureSafeRects, 1600);
+    setInterval(measureSafeRects, 2000);
 
-    field.parentElement.addEventListener("mousemove", (e) => {
+    window.addEventListener("mousemove", (e) => {
       const r = field.getBoundingClientRect();
       mx = e.clientX - r.left;
       my = e.clientY - r.top;
-      active = true;
-    });
-    field.parentElement.addEventListener("mouseleave", () => { active = false; mx = my = -9999; });
+      active = my > -R && my < H + R;
+    }, { passive: true });
+    document.addEventListener("mouseleave", () => { active = false; mx = my = -9999; });
 
     // theme toggle should refresh colors
     const themeBtn = document.getElementById("themeToggle");
@@ -393,32 +424,58 @@
       if (!running) return;
       t += 0.02;
       ctx.clearRect(0, 0, W, H);
+
+      const cxc = W / 2, cyc = H / 2;
+      const halfDiag = Math.sqrt(cxc * cxc + cyc * cyc);
+      // start the overscanned grid slightly off-canvas
+      const ox = -2 * GAP, oy = -2 * GAP;
+
       for (let gy = 0; gy < rows; gy++) {
         for (let gx = 0; gx < cols; gx++) {
-          const x = gx * GAP;
-          const y = gy * GAP;
+          const gxp = ox + gx * GAP;
+          const gyp = oy + gy * GAP;
+
+          // --- curved screen: pincushion bend toward the centre ---
+          const rx = gxp - cxc, ry = gyp - cyc;
+          const rn = Math.sqrt(rx * rx + ry * ry) / halfDiag; // 0 centre → 1 corner
+          const bend = 1 - CURVE * rn * rn;
+          const x = cxc + rx * bend;
+          const y = cyc + ry * bend;
+
+          if (x < -GAP || x > W + GAP || y < -GAP || y > H + GAP) continue;
+
+          // copy areas keep a whisper of texture and never get the ripple
+          const behindText = inSafeRect(x, y);
+
           // ambient diagonal wave
           const wave = Math.sin(x * 0.015 + y * 0.02 + t);
           let size = DOT + wave * 0.9;
-          let alpha = 0.28 + wave * 0.12;
+          let alpha = 0.46 + wave * 0.14;
           let accent = false;
 
-          if (active) {
+          if (behindText) {
+            alpha *= 0.22;
+            size *= 0.8;
+          } else if (active) {
             const dx = x - mx, dy = y - my;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < R) {
               const f = 1 - dist / R;
-              size += f * 5.5;
-              alpha += f * 0.6;
-              if (f > 0.55) accent = true;
+              size += f * 4.5;
+              alpha += f * 0.5;
+              if (f > 0.6) accent = true;
             }
           }
           // sparse static accent nodes
-          if (!accent && (gx * 31 + gy * 17) % 41 === 0) accent = true;
+          if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
+
+          // gentle rim falloff — only the far corners recede
+          alpha *= 1 - Math.pow(rn, 3) * 0.55;
+          if (alpha <= 0.02) continue;
 
           ctx.globalAlpha = Math.min(alpha, 0.95);
           ctx.fillStyle = accent ? colors.accent : colors.dot;
-          const s = Math.max(size, 0.5);
+          const s = Math.max(size * bend, 0.5);
           ctx.fillRect(x - s / 2, y - s / 2, s, s);
         }
       }
