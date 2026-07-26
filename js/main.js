@@ -355,6 +355,7 @@
     const DOT = 2.7;         // base dot size
     // concave sphere wrapping the viewer: the rim is nearest, the centre farthest
     const K = 0.38;          // radial magnification toward the rim
+    const PARALLAX = 0.3;    // how far the surface travels per unit of scroll
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -440,9 +441,17 @@
 
       const cxc = W / 2, cyc = H / 2;
 
-      for (let gy = 0; gy <= rows; gy++) {
-        // v: -1 top … +1 bottom
-        const v = (gy / rows) * 2 - 1;
+      // scroll drags the grid along the sphere's surface: one row per GAP of
+      // travel, split into whole rows (kept in the pattern seed so accents
+      // travel too) and a fraction (the smooth glide)
+      const scrollRows = (window.scrollY * PARALLAX) / GAP;
+      const rowShift = Math.floor(scrollRows);
+      const rowFrac = scrollRows - rowShift;
+
+      for (let gy = -1; gy <= rows + 1; gy++) {
+        // v: -1 top … +1 bottom, sliding upward as the page scrolls down
+        const v = ((gy - rowFrac) / rows) * 2 - 1;
+        const rowSeed = gy + rowShift;
 
         for (let gx = 0; gx <= cols; gx++) {
           // u: -1 left … +1 right
@@ -484,7 +493,7 @@
             }
           }
           // sparse static accent nodes
-          if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
+          if (!accent && !behindText && (((gx * 31 + rowSeed * 17) % 41) + 41) % 41 === 0) accent = true;
 
           // the centre is the far wall, the rim is right in front of us
           alpha *= 0.6 + 0.55 * rn * rn;
