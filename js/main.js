@@ -351,10 +351,13 @@
   if (field && !reduceMotion) {
     const ctx = field.getContext("2d");
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const GAP = 30;          // grid spacing (css px)
+    const GAP = 30;          // grid spacing at the centre (css px)
     const DOT = 2.7;         // base dot size
-    const THETA = 1.34;      // fisheye field of view — we sit *inside* the sphere
-    const SIN_T = Math.sin(THETA);
+    // concave cylindrical screen wrapping the viewer
+    const PHI = 1.16;        // horizontal half-FOV — sides foreshorten
+    const SIN_P = Math.sin(PHI);
+    const BOW = 0.82;        // vertical spread at the sides → the arced silhouette
+    const PANEL = 0.56;      // panel height as a share of the field, before bowing
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -396,8 +399,9 @@
       field.width = W * dpr; field.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // overscan the grid so bent edge dots still cover the rim
-      cols = Math.ceil(W / GAP) + 5;
-      rows = Math.ceil(H / GAP) + 5;
+      // column count chosen so centre spacing lands on GAP after foreshortening
+      cols = Math.max(24, Math.round((W * PHI) / (GAP * SIN_P)));
+      rows = Math.max(8, Math.round((PANEL * H) / GAP));
       measureSafeRects();
     }
     readColors();
@@ -427,24 +431,26 @@
       ctx.clearRect(0, 0, W, H);
 
       const cxc = W / 2, cyc = H / 2;
-      const halfDiag = Math.sqrt(cxc * cxc + cyc * cyc);
-      // start the overscanned grid slightly off-canvas
-      const ox = -2 * GAP, oy = -2 * GAP;
+      const halfPanel = (PANEL * H) / 2;
 
-      for (let gy = 0; gy < rows; gy++) {
-        for (let gx = 0; gx < cols; gx++) {
-          const gxp = ox + gx * GAP;
-          const gyp = oy + gy * GAP;
+      for (let gy = 0; gy <= rows; gy++) {
+        // v: -1 top … +1 bottom of the panel
+        const v = (gy / rows) * 2 - 1;
 
-          // --- inside-a-sphere fisheye: centre spreads out, rim packs together ---
-          const rx = gxp - cxc, ry = gyp - cyc;
-          const rn = Math.sqrt(rx * rx + ry * ry) / halfDiag; // 0 centre → 1 corner
-          // sin-mapping keeps rn=1 pinned to the corner, so dots reach every edge
-          const bend = rn < 0.0001 ? THETA / SIN_T : Math.sin(rn * THETA) / (rn * SIN_T);
-          const x = cxc + rx * bend;
-          const y = cyc + ry * bend;
+        for (let gx = 0; gx <= cols; gx++) {
+          // u: -1 left … +1 right of the screen
+          const u = (gx / cols) * 2 - 1;
+
+          // --- concave cylinder: horizontal foreshortening toward the sides ---
+          const x = cxc + (W / 2) * (Math.sin(u * PHI) / SIN_P);
+          // --- rows bow outward at the sides: the curved screen silhouette ---
+          const spread = 1 + BOW * u * u;
+          const y = cyc + halfPanel * v * spread;
 
           if (x < -GAP || x > W + GAP || y < -GAP || y > H + GAP) continue;
+
+          const rn = Math.abs(u);           // 0 centre → 1 side
+          const bend = 0.7 + 0.5 * (1 - rn * rn); // depth cue for size
 
           // copy areas keep a whisper of texture and never get the ripple
           const behindText = inSafeRect(x, y);
@@ -452,7 +458,7 @@
           // ambient diagonal wave
           const wave = Math.sin(x * 0.015 + y * 0.02 + t);
           let size = DOT + wave * 0.9;
-          let alpha = 0.46 + wave * 0.14;
+          let alpha = 0.56 + wave * 0.14;
           let accent = false;
 
           if (behindText) {
@@ -471,8 +477,10 @@
           // sparse static accent nodes
           if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
 
-          // the rim is the far wall of the sphere: slightly dimmer, never empty
-          alpha *= 1 - Math.pow(rn, 2.6) * 0.42;
+          // the screen faces us at the centre and turns away at the sides
+          alpha *= 1 - Math.pow(rn, 2.2) * 0.34;
+          // soften the very top and bottom rows so the arcs read as edges, not cuts
+          alpha *= 1 - Math.pow(Math.abs(v), 14) * 0.9;
           if (alpha <= 0.02) continue;
 
           ctx.globalAlpha = Math.min(alpha, 0.95);

@@ -214,10 +214,9 @@ main { max-width: var(--page-max); margin-inline: auto; }
   width: 100vw;
   height: 100%;
   pointer-events: none;
-  border-radius: 52px;
-  /* barely-there rim fade: the grid must still touch every edge and corner */
-  -webkit-mask-image: radial-gradient(168% 158% at 50% 50%, #000 90%, transparent 100%);
-  mask-image: radial-gradient(168% 158% at 50% 50%, #000 90%, transparent 100%);
+  /* the curved arcs define the shape now — only the far left/right edges feather */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
 }
 .hero__grid, .hero__proof { position: relative; z-index: 1; }
 .hero__grid {
