@@ -111,6 +111,20 @@ a:focus-visible, button:focus-visible {
 }
 
 /* ============================================================
+   Sphere dot field — one fixed surface the whole page sits inside
+   ============================================================ */
+.field {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+/* everything else rides above the sphere */
+.meta, main, .footer { position: relative; z-index: 1; }
+
+/* ============================================================
    Cursor + reading progress
    ============================================================ */
 .cursor {
@@ -204,19 +218,6 @@ main { max-width: var(--page-max); margin-inline: auto; }
 .hero {
   position: relative;
   padding: clamp(110px, 14vh, 150px) var(--gutter) 0;
-}
-/* interactive dot field — full-bleed, curved-screen surface under the content */
-.field {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
-  height: 100%;
-  pointer-events: none;
-  /* the curved arcs define the shape now — only the far left/right edges feather */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
 }
 .hero__grid, .hero__proof { position: relative; z-index: 1; }
 .hero__grid {

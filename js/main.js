@@ -353,11 +353,8 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const GAP = 30;          // grid spacing at the centre (css px)
     const DOT = 2.7;         // base dot size
-    // concave cylindrical screen wrapping the viewer
-    const PHI = 1.16;        // horizontal half-FOV — sides foreshorten
-    const SIN_P = Math.sin(PHI);
-    const BOW = 0.5;        // vertical spread at the sides → the arced silhouette
-    const PANEL = 0.58;      // panel height as a share of the field, before bowing
+    // concave sphere wrapping the viewer: the rim is nearest, the centre farthest
+    const K = 0.38;          // radial magnification toward the rim
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -370,19 +367,25 @@
       colors.dot = cs.getPropertyValue("--fg-muted").trim() || "#5F5E5A";
       colors.accent = cs.getPropertyValue("--accent").trim() || "#FF4A1C";
     }
-    // text zones are punched out of the grid so copy stays crisp
+    // every block of copy on the page keeps the grid off its back
+    const SAFE_SEL = [
+      ".hero__meta", ".hero__title", ".hero__lede", ".hero__ctas", ".chat", ".proof",
+      ".meta", ".section__meta", ".section__title", ".section__intro",
+      ".card", ".pstep", ".faq__q", ".faq__a", ".cta__actions", ".cta__caption",
+      ".footer__wordmark", ".footer__bar", ".ticker",
+    ].join(", ");
+    const safeEls = () => document.querySelectorAll(SAFE_SEL);
     function measureSafeRects() {
-      const fr = field.getBoundingClientRect();
       const pad = 14;
-      const sel = ".hero__meta, .hero__title, .hero__lede, .hero__ctas, .chat, .proof";
-      safeRects = Array.from(document.querySelectorAll(sel)).map((el) => {
+      // the canvas is viewport-fixed, so client rects are already in its space
+      safeRects = [];
+      safeEls().forEach((el) => {
         const r = el.getBoundingClientRect();
-        return {
-          x1: r.left - fr.left - pad,
-          y1: r.top - fr.top - pad,
-          x2: r.right - fr.left + pad,
-          y2: r.bottom - fr.top + pad,
-        };
+        if (r.bottom < -pad || r.top > H + pad) return; // off-screen: skip
+        safeRects.push({
+          x1: r.left - pad, y1: r.top - pad,
+          x2: r.right + pad, y2: r.bottom + pad,
+        });
       });
     }
     function inSafeRect(x, y) {
@@ -398,25 +401,30 @@
       W = r.width; H = r.height;
       field.width = W * dpr; field.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // overscan the grid so bent edge dots still cover the rim
-      // column count chosen so centre spacing lands on GAP after foreshortening
-      cols = Math.max(24, Math.round((W * PHI) / (GAP * SIN_P)));
-      rows = Math.max(8, Math.round((PANEL * H) / GAP));
+      // enough resolution that the magnified rim still reads as a grid
+      cols = Math.max(20, Math.round((W / GAP) * 1.25));
+      rows = Math.max(14, Math.round((H / GAP) * 1.25));
       measureSafeRects();
     }
     readColors();
     resize();
     window.addEventListener("resize", resize, { passive: true });
-    // re-measure as fonts settle and the chat demo grows
+    // the field is viewport-fixed, so the copy underneath changes as we scroll
+    let remeasureQueued = false;
+    const queueRemeasure = () => {
+      if (remeasureQueued) return;
+      remeasureQueued = true;
+      requestAnimationFrame(() => { measureSafeRects(); remeasureQueued = false; });
+    };
+    window.addEventListener("scroll", queueRemeasure, { passive: true });
     setTimeout(measureSafeRects, 400);
     setTimeout(measureSafeRects, 1600);
-    setInterval(measureSafeRects, 2000);
+    setInterval(measureSafeRects, 1200);
 
     window.addEventListener("mousemove", (e) => {
-      const r = field.getBoundingClientRect();
-      mx = e.clientX - r.left;
-      my = e.clientY - r.top;
-      active = my > -R && my < H + R;
+      mx = e.clientX;
+      my = e.clientY;
+      active = true;
     }, { passive: true });
     document.addEventListener("mouseleave", () => { active = false; mx = my = -9999; });
 
@@ -431,28 +439,27 @@
       ctx.clearRect(0, 0, W, H);
 
       const cxc = W / 2, cyc = H / 2;
-      const halfPanel = (PANEL * H) / 2;
 
       for (let gy = 0; gy <= rows; gy++) {
-        // v: -1 top … +1 bottom of the panel
+        // v: -1 top … +1 bottom
         const v = (gy / rows) * 2 - 1;
 
         for (let gx = 0; gx <= cols; gx++) {
-          // u: -1 left … +1 right of the screen
+          // u: -1 left … +1 right
           const u = (gx / cols) * 2 - 1;
 
-          // --- concave cylinder: horizontal foreshortening toward the sides ---
-          const x = cxc + (W / 2) * (Math.sin(u * PHI) / SIN_P);
-          // --- the sides swing toward the viewer, so they magnify:
-          //     rows spread apart there and the panel grows taller ---
-          const spread = 1 + BOW * u * u;
-          const y = cyc + halfPanel * v * spread;
+          // --- concave sphere: a single radial magnification bends every row
+          //     and column, so the rim curves on all four sides ---
+          const r = Math.sqrt(u * u + v * v);
+          const mag = 1 + K * r * r;
+          const x = cxc + (W / 2) * u * mag;
+          const y = cyc + (H / 2) * v * mag;
 
           if (x < -GAP || x > W + GAP || y < -GAP || y > H + GAP) continue;
 
-          const rn = Math.abs(u);           // 0 centre → 1 side
-          // nearer surface = bigger, brighter dots at the edges
-          const bend = 0.78 + 0.62 * rn * rn;
+          const rn = Math.min(r, 1.42);     // 0 centre → ~1.4 corners
+          // nearer surface = bigger, brighter dots toward the rim
+          const bend = 0.58 + 0.6 * rn * rn;
 
           // copy areas keep a whisper of texture and never get the ripple
           const behindText = inSafeRect(x, y);
@@ -479,10 +486,10 @@
           // sparse static accent nodes
           if (!accent && !behindText && (gx * 31 + gy * 17) % 41 === 0) accent = true;
 
-          // the centre is the far wall, the edges are right in front of us
-          alpha *= 0.72 + 0.5 * rn * rn;
-          // soften the very top and bottom rows so the arcs read as edges, not cuts
-          alpha *= 1 - Math.pow(Math.abs(v), 14) * 0.9;
+          // the centre is the far wall, the rim is right in front of us
+          alpha *= 0.6 + 0.55 * rn * rn;
+          // the far corners of the sphere roll out of sight
+          if (r > 1.12) alpha *= Math.max(0, 1 - (r - 1.12) / 0.34);
           if (alpha <= 0.02) continue;
 
           ctx.globalAlpha = Math.min(alpha, 0.95);
@@ -495,15 +502,12 @@
       requestAnimationFrame(draw);
     }
 
-    const heroEl = document.querySelector(".hero");
-    const fieldIO = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        const was = running;
-        running = e.isIntersecting;
-        if (running && !was) requestAnimationFrame(draw);
-      });
-    }, { threshold: 0.02 });
-    fieldIO.observe(heroEl);
+    // the sphere is always on screen — only pause when the tab is hidden
+    document.addEventListener("visibilitychange", () => {
+      const was = running;
+      running = !document.hidden;
+      if (running && !was) requestAnimationFrame(draw);
+    });
     requestAnimationFrame(draw);
   }
 })();
