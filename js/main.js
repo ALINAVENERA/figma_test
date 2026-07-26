@@ -356,8 +356,8 @@
     // concave cylindrical screen wrapping the viewer
     const PHI = 1.16;        // horizontal half-FOV — sides foreshorten
     const SIN_P = Math.sin(PHI);
-    const BOW = 0.82;        // vertical spread at the sides → the arced silhouette
-    const PANEL = 0.56;      // panel height as a share of the field, before bowing
+    const BOW = 0.5;        // vertical spread at the sides → the arced silhouette
+    const PANEL = 0.72;      // panel height as a share of the field, before bowing
     let W = 0, H = 0, cols = 0, rows = 0;
     let colors = { dot: "#5F5E5A", accent: "#FF4A1C" };
     let mx = -9999, my = -9999, active = false;
@@ -443,8 +443,9 @@
 
           // --- concave cylinder: horizontal foreshortening toward the sides ---
           const x = cxc + (W / 2) * (Math.sin(u * PHI) / SIN_P);
-          // --- rows bow outward at the sides: the curved screen silhouette ---
-          const spread = 1 + BOW * u * u;
+          // --- the sides swing toward the viewer: rows converge there,
+          //     so the top arc drops and the bottom arc lifts at the edges ---
+          const spread = 1 - BOW * u * u;
           const y = cyc + halfPanel * v * spread;
 
           if (x < -GAP || x > W + GAP || y < -GAP || y > H + GAP) continue;
