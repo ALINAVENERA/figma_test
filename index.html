@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/fonts.css?v=13" />
-  <link rel="stylesheet" href="css/style.css?v=13" />
+  <link rel="stylesheet" href="css/fonts.css?v=14" />
+  <link rel="stylesheet" href="css/style.css?v=14" />
 </head>
 <body>
   <canvas class="field" id="field" aria-hidden="true"></canvas>
@@ -29,10 +29,10 @@
   <header class="meta" id="meta">
     <a href="#top" class="meta__brand">Routine<span class="meta__suffix">[R]</span></a>
     <nav class="meta__nav mono">
-      <a href="#product" data-hover data-scramble>Продукт</a>
-      <a href="#process" data-hover data-scramble>Процесс</a>
-      <a href="#faq" data-hover data-scramble>Вопросы</a>
-      <a href="#contact" data-hover data-scramble>Связь</a>
+      <a href="#product" data-hover data-scramble>Агенты</a>
+      <a href="#process" data-hover data-scramble>Как работаем</a>
+      <a href="#case" data-hover data-scramble>Кейс</a>
+      <a href="#faq" data-hover data-scramble>FAQ</a>
     </nav>
     <div class="meta__right">
       <span class="meta__status"><span class="dot"></span>Берём 2 пилота в этом квартале</span>
@@ -51,27 +51,26 @@
           </div>
 
           <h1 class="hero__title">
-            <span class="line"><span>Внедряем</span></span>
-            <span class="line"><span>AI-агентов</span></span>
-            <span class="line"><span>клиентской</span></span>
-            <span class="line"><span>поддержки<i class="accent">.</i></span></span>
+            <span class="line"><span>AI-поддержка,</span></span>
+            <span class="line"><span>которая работает</span></span>
+            <span class="line"><span>как сильная команда<i class="accent">.</i></span></span>
           </h1>
 
           <p class="hero__lede">
-            За 3 недели — с вашим тоном голоса, интеграциями в Bitrix24,
-            amoCRM и Telegram. Не шаблонный чат-бот — агентная система
-            под ваши сценарии.
+            За 3 недели внедряем агента с вашим tone of voice, базой знаний
+            и интеграциями. Он решает типовые обращения сам — и знает,
+            когда позвать человека.
           </p>
 
           <div class="hero__ctas">
-            <a href="#contact" class="btn btn--primary" data-hover>Оставить заявку <span class="arrow">&#8594;</span></a>
-            <a href="#process" class="btn btn--ghost" data-hover>Как это работает <span class="arrow">&#8594;</span></a>
+            <a href="#contact" class="btn btn--primary" data-hover>Обсудить пилот <span class="arrow">&#8594;</span></a>
+            <a href="#process" class="btn btn--ghost" data-hover>Смотреть процесс <span class="arrow">&#8595;</span></a>
           </div>
         </div>
 
         <div class="chat reveal" id="chat" data-hover>
           <header class="chat__head mono">
-            <span class="chat__title">[demo] routine-agent &#183; Telegram</span>
+            <span class="chat__title">[ LIVE ] routine-agent &#183; Telegram</span>
             <span class="chat__status"><span class="dot"></span>online</span>
           </header>
           <div class="chat__body" data-chat-body></div>
@@ -81,32 +80,14 @@
         </div>
       </div>
 
-      <div class="hero__proof">
-        <div class="proof">
-          <span class="proof__k"><span data-count="78">0</span><i class="accent">%</i></span>
-          <span class="proof__v">обращений закрыто без оператора</span>
-        </div>
-        <div class="proof">
-          <span class="proof__k"><span data-count="95">0</span><i class="accent">%</i></span>
-          <span class="proof__v">совпадение с ожидаемым ответом в eval</span>
-        </div>
-        <div class="proof">
-          <span class="proof__k">3 <i class="proof__unit">нед</i></span>
-          <span class="proof__v">от kick-off до пилота</span>
-        </div>
-        <div class="proof">
-          <span class="proof__k">24/7</span>
-          <span class="proof__v">ночью, в выходные и в пики</span>
-        </div>
-      </div>
     </section>
 
     <!-- Ticker: giant outline marquee -->
     <div class="ticker ticker--big" aria-hidden="true">
       <div class="ticker__row">
         <div class="ticker__track">
-          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; WhatsApp &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594; SIP &#8594;&nbsp;</span>
-          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; WhatsApp &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594; SIP &#8594;&nbsp;</span>
+          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594;&nbsp;</span>
+          <span>Bitrix24 &#8594; amoCRM &#8594; Telegram &#8594; <i>78% без оператора</i> &#8594; RAG &#8594; Eval &#8594; <i>24/7</i> &#8594;&nbsp;</span>
         </div>
       </div>
     </div>
@@ -127,30 +108,21 @@
             <span class="num mono card__idx">[A]</span>
             <h3>Агент первой линии</h3>
           </header>
-          <p>Отвечает на 70–80% обращений без человека. Знает продукт, тарифы, политику возвратов. Эскалирует, если не уверен.</p>
-          <div class="card__tags mono">
-            <span>Telegram</span><span>WhatsApp</span><span>Widget</span><span>email</span>
-          </div>
+          <p>Закрывает 70–80% типовых обращений. Знает продукт, тарифы и политику возвратов. Эскалирует, если не уверен.</p>
         </article>
         <article class="card reveal" data-hover>
           <header class="card__head">
             <span class="num mono card__idx">[B]</span>
             <h3>Разметка входящих</h3>
           </header>
-          <p>Классифицирует обращения по типу, срочности, клиенту. Оператор открывает уже отсортированную очередь.</p>
-          <div class="card__tags mono">
-            <span>Bitrix24</span><span>amoCRM</span><span>HubSpot</span>
-          </div>
+          <p>Определяет тему, срочность и клиента. Оператор открывает уже разобранную и приоритизированную очередь.</p>
         </article>
         <article class="card reveal" data-hover>
           <header class="card__head">
             <span class="num mono card__idx">[C]</span>
             <h3>Voice-агент</h3>
           </header>
-          <p>Принимает и совершает звонки — запись, бронь, подтверждение. Передаёт человеку со всей историей.</p>
-          <div class="card__tags mono">
-            <span>Telephony</span><span>SIP</span><span>Mango Office</span>
-          </div>
+          <p>Принимает звонки, записывает и подтверждает. Передаёт человеку разговор вместе с полной историей.</p>
         </article>
       </div>
     </section>
@@ -162,39 +134,57 @@
           <span class="num">[02]</span>
           <span class="eyebrow" data-scramble-in>Процесс</span>
         </div>
-        <h2 class="section__title">От kick-off до прод — 3 недели.</h2>
-        <p class="section__intro">Не проект, а подписка: после запуска продолжаем тюнить метрики.</p>
+        <h2 class="section__title">От kick-off до пилота — 3 недели.</h2>
       </div>
 
       <ol class="pstrip reveal">
         <li class="pstep">
-          <span class="pstep__meta mono">[01] &#183; 1 нед</span>
+          <span class="pstep__meta mono">[01]</span>
           <h4>Аудит</h4>
           <p>500+ диалогов, топ-20 сценариев, tone-of-voice.</p>
         </li>
         <li class="pstep">
-          <span class="pstep__meta mono">[02] &#183; 1 нед</span>
+          <span class="pstep__meta mono">[02]</span>
           <h4>Сборка</h4>
-          <p>LLM-обвязка, интеграции, промпты и ретрив.</p>
+          <p>Интеграции, ретрив, промпты и гардрэйлы.</p>
         </li>
         <li class="pstep">
-          <span class="pstep__meta mono">[03] &#183; 1 нед</span>
+          <span class="pstep__meta mono">[03]</span>
           <h4>Пилот</h4>
-          <p>10% трафика, ежедневное ревью, выкат на 100%.</p>
+          <p>10% трафика, ежедневное ревью и eval.</p>
         </li>
         <li class="pstep">
-          <span class="pstep__meta mono">[04] &#183; &#8734;</span>
+          <span class="pstep__meta mono">[04]</span>
           <h4>Рост</h4>
-          <p>Отчёты раз в 2 недели, база знаний, A/B промптов.</p>
+          <p>Отчёты, база знаний и A/B промптов.</p>
         </li>
       </ol>
     </section>
 
-    <!-- [03] Вопросы -->
+    <!-- [03] Кейс -->
+    <section class="case reveal" id="case">
+      <div class="case__inner">
+        <div class="case__story">
+          <div class="case__meta mono">[ CASE 01 ] EDTECH &#183; 18 400 ДИАЛОГОВ / МЕС</div>
+          <h2>Первая линия<br />без очереди.</h2>
+          <div class="case__metrics mono">
+            <span><b>78%</b> без оператора</span>
+            <span><b>1.4 s</b> ответ</span>
+            <span><b>95%</b> eval match</span>
+          </div>
+        </div>
+        <div class="case__change">
+          <span class="mono">Что изменилось</span>
+          <p>Ночная очередь исчезла.<br />Операторы разбирают только сложные случаи, а клиент не ждёт первого ответа.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- [04] Вопросы -->
     <section class="section" id="faq">
       <div class="section__head reveal">
         <div class="section__meta mono">
-          <span class="num">[03]</span>
+          <span class="num">[04]</span>
           <span class="eyebrow" data-scramble-in>Вопросы</span>
         </div>
         <h2 class="section__title">Что обычно спрашивают.</h2>
@@ -236,21 +226,21 @@
       </ul>
     </section>
 
-    <!-- [04] Связь -->
+    <!-- [05] Связь -->
     <section class="section cta" id="contact">
       <div class="section__head reveal">
         <div class="section__meta mono">
-          <span class="num">[04]</span>
+          <span class="num">[05]</span>
           <span class="eyebrow" data-scramble-in>Связь</span>
         </div>
-        <h2 class="section__title">Оставьте заявку —<br />пришлём аудит за 2 дня<i class="accent">.</i></h2>
+        <h2 class="section__title">Покажите 500 диалогов —<br />мы пришлём аудит за 2 дня<i class="accent">.</i></h2>
       </div>
 
       <div class="cta__actions reveal">
-        <a href="mailto:team@routine.ai" class="btn btn--primary btn--lg" data-hover>Оставить заявку <span class="arrow">&#8594;</span></a>
+        <a href="mailto:team@routine.ai" class="btn btn--primary btn--lg" data-hover>team@routine.ai <span class="arrow">&#8594;</span></a>
         <a href="#" class="btn btn--ghost btn--lg" data-hover>Telegram @routine_team <span class="arrow">&#8599;</span></a>
       </div>
-      <p class="cta__caption mono reveal">team@routine.ai &#183; Москва &#183; Пн–Пт 10:00–19:00 &#183; ответим в течение 2 часов &#183; NDA до обсуждения</p>
+      <p class="cta__caption mono reveal">NDA до обсуждения &#183; ответим в течение 2 часов</p>
     </section>
   </main>
 
@@ -264,6 +254,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=13"></script>
+  <script src="js/main.js?v=14"></script>
 </body>
 </html>

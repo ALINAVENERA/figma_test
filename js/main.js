@@ -267,12 +267,10 @@
   const chatMeta = document.querySelector("[data-chat-meta]");
   if (chatBody) {
     const SCRIPT = [
-      { who: "user", text: "Здравствуйте! Оплатила курс, а доступ не пришёл. Заказ №4821" },
-      { who: "agent", text: "Проверила заказ №4821: оплата прошла в 14:02, письмо ушло на p***@gmail.com. Продублировала ссылку сюда — проверьте «Промоакции»." },
-      { who: "user", text: "Нашла, спасибо!" },
-      { who: "agent", text: "Отлично. Доступ активен 365 дней. Я тут 24/7 — хорошего обучения!" },
+      { who: "user", text: "Не могу найти акт за март. Можете помочь?" },
+      { who: "agent", text: "Нашёл документ в Bitrix24. Отправил акт за март в этот чат и продублировал на почту. Нужен ещё счёт?" },
     ];
-    const FINAL_META = "[закрыто без оператора — 47 сек — CSAT 5/5]";
+    const FINAL_META = "[ SOURCE · Bitrix24 / documents ] [ CONFIDENCE · 0.96 ] [ RESPONSE · 1.4 S ] [ NO ESCALATION ]";
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
     function addMsg(who) {
